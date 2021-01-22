@@ -1,14 +1,20 @@
-﻿namespace KafkaLogCompaction.Services
+﻿using Confluent.Kafka;
+using KafkaLogCompaction.Configuration;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace KafkaLogCompaction.Services
 {
     public interface IKafkaService
     {
-        // todo: consume
+        Task ProduceAsync(List<string> topics, string msg, CancellationToken token);
+        
+        IConsumer<Ignore, string> GetConsumer();
+        IProducer<TK, TV> GetProducer<TK, TV>();
 
-        // todo: produce
+        ConsumerConfig SetupConsumerConfig(KafkaConfiguration kafkaConfiguration);
 
-        // todo: factory
-
-        // todo:: map configuration
-
+        ProducerConfig SetupProducerConfig(KafkaConfiguration kafkaConfiguration);
     }
 }
