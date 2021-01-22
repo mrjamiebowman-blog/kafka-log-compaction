@@ -21,6 +21,9 @@ namespace KafkaLogCompaction
                 {
                     services.AddTransient<IKafkaService, KafkaService>();
                     services.AddHostedService<Worker>();
-                });
+                }).ConfigureAppConfiguration(((context, builder) =>
+                {
+                    // todo: appsettings.json
+                }));
     }
 }
