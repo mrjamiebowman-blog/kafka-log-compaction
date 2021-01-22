@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30803.129
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1DA69E21-9664-47E9-80BE-A8C494EB1A54}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4BA1135F-3041-4169-A214-DE15058A8859}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafkaLogCompaction", "KafkaLogCompaction\KafkaLogCompaction.csproj", "{D03C16B5-B529-4B59-A762-4419D6E42D18}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D03C16B5-B529-4B59-A762-4419D6E42D18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D03C16B5-B529-4B59-A762-4419D6E42D18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D03C16B5-B529-4B59-A762-4419D6E42D18}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D03C16B5-B529-4B59-A762-4419D6E42D18}.Debug|x64.Build.0 = Debug|Any CPU
+		{D03C16B5-B529-4B59-A762-4419D6E42D18}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D03C16B5-B529-4B59-A762-4419D6E42D18}.Debug|x86.Build.0 = Debug|Any CPU
+		{D03C16B5-B529-4B59-A762-4419D6E42D18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D03C16B5-B529-4B59-A762-4419D6E42D18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D03C16B5-B529-4B59-A762-4419D6E42D18}.Release|x64.ActiveCfg = Release|Any CPU
+		{D03C16B5-B529-4B59-A762-4419D6E42D18}.Release|x64.Build.0 = Release|Any CPU
+		{D03C16B5-B529-4B59-A762-4419D6E42D18}.Release|x86.ActiveCfg = Release|Any CPU
+		{D03C16B5-B529-4B59-A762-4419D6E42D18}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D03C16B5-B529-4B59-A762-4419D6E42D18} = {4BA1135F-3041-4169-A214-DE15058A8859}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D467EFF6-E853-4C96-9326-63F584D57C6A}
+	EndGlobalSection
+EndGlobal
