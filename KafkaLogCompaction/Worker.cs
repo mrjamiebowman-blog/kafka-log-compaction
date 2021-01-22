@@ -3,16 +3,19 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using KafkaLogCompaction.Services;
 
 namespace KafkaLogCompaction
 {
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
+        private readonly IKafkaService _kafkaService;
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(ILogger<Worker> logger, IKafkaService kafkaService)
         {
             _logger = logger;
+            _kafkaService = kafkaService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
