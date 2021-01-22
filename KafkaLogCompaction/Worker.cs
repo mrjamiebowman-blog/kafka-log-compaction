@@ -4,8 +4,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using KafkaLogCompaction.Models;
 
 namespace KafkaLogCompaction
 {
@@ -13,6 +15,10 @@ namespace KafkaLogCompaction
     {
         private readonly ILogger<Worker> _logger;
         private readonly IKafkaService _kafkaService;
+
+        public List<ProcessSettings> processSettings = new List<ProcessSettings>();
+
+        public List<string> topics = new List<string> { "klc.settings" };
 
         public Worker(ILogger<Worker> logger, IKafkaService kafkaService)
         {
@@ -29,40 +35,33 @@ namespace KafkaLogCompaction
             
             try
             {
-                var topics = new List<string> { "klc.settings" };
                 consumer.Subscribe(topics);
 
                 while (true)
                 {
                     try
                     {
-                        var consumeResult = consumer.Consume(cancellationToken);
+                        // setting the time span to 5 seconds so this will exit if there is no data after 5 seconds.
+                        // this happens during the initial start.
+                        var consumeResult = consumer.Consume(TimeSpan.FromSeconds(5));
+
+                        if (consumeResult == null)
+                        {
+                            break;
+                        }
 
                         if (consumeResult.IsPartitionEOF)
                         {
                             Console.WriteLine($"Reached end of topic {consumeResult.Topic}, partition {consumeResult.Partition}, offset {consumeResult.Offset}.");
-                            continue;
+                            break;
                         }
 
                         Console.WriteLine($"Received message at {consumeResult.TopicPartitionOffset}: {consumeResult.Message.Value}");
 
-                        //if (consumeResult.Offset % commitPeriod == 0)
-                        //{
-                        //    // The Commit method sends a "commit offsets" request to the Kafka
-                        //    // cluster and synchronously waits for the response. This is very
-                        //    // slow compared to the rate at which the consumer is capable of
-                        //    // consuming messages. A high performance application will typically
-                        //    // commit offsets relatively infrequently and be designed handle
-                        //    // duplicate messages in the event of failure.
-                        //    try
-                        //    {
-                        //        consumer.Commit(consumeResult);
-                        //    }
-                        //    catch (KafkaException e)
-                        //    {
-                        //        Console.WriteLine($"Commit error: {e.Error.Reason}");
-                        //    }
-                        //}
+                        // setting
+                        var setting = JsonSerializer.Deserialize<ProcessSettings>(consumeResult.Message.Value);
+                        setting.LastProcessed = consumeResult.Message.Timestamp.UtcDateTime;
+                        processSettings.Add(setting);
                     }
                     catch (ConsumeException e)
                     {
@@ -78,9 +77,16 @@ namespace KafkaLogCompaction
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                // todo: update setting
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await Task.Delay(20000, cancellationToken);
+                // update setting
+                ProcessSettings setting = new ProcessSettings();
+                setting.SettingName = "KafkaLogCompaction";
+                setting.Value = "value";
+
+                var json = JsonSerializer.Serialize(setting);
+                await _kafkaService.ProduceAsync(topics, json, cancellationToken);
+
+                _logger.LogInformation("Worker running at: {time}", setting.LastProcessed);
+                await Task.Delay(2000, cancellationToken);
             }
         }
     }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using KafkaLogCompaction.Models;
 
 namespace KafkaLogCompaction.Services
 {
@@ -26,11 +27,11 @@ namespace KafkaLogCompaction.Services
             try
             {
                 var config = SetupProducerConfig(_kafkaConfiguration.CurrentValue);
-                using var producer = GetProducer<Null, string>(config);
+                using var producer = GetProducer<string, string>(config);
 
                 foreach (var topic in topics)
                 {
-                    var deliveryReport = producer.ProduceAsync(topic, new Message<Null, string>() { Value = msg }, token);
+                    var deliveryReport = producer.ProduceAsync(topic, new Message<string, string>() { Key = ProcessSettings.Key, Value = msg }, token);
 
                     await deliveryReport.ContinueWith(task =>
                     {
